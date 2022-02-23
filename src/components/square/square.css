@@ -1,0 +1,29 @@
+.square {
+    background: #2d3036;
+    border: 3px solid #999;
+    float: left;
+    font-size: 30px;
+    font-weight: bold;
+    line-height: 60px;
+    height: 60px;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    text-align: center;
+    width: 60px;
+}
+
+.gray {
+    background: #2d3036;
+    border: 3px solid rgb(255, 255, 255);
+}
+
+.green {
+    background: rgb(66, 136, 66);
+    border: 3px solid rgb(255, 255, 255);
+}
+
+.yellow {
+    background: rgb(192, 165, 47);
+    border: 3px solid rgb(255, 255, 255);
+}
