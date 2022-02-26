@@ -17,52 +17,49 @@ export default function WordDuel() {
     const [guesses, setGuesses] = useState([]);
     const [evaluations, setEvaluations] = useState([]);
     const [gameOver, setGameOver] = useState(false);
-    const [error, setError] = useState("");
+    const [message, setMessage] = useState("");
 
     function checkGuess(guess) {
         if (guess.length !== word.length) {
-            setError("Guess wrong length!");
+            setMessage("Guess wrong length!");
             return false;
         }
 
         if (guesses.length >= MAX_GUESSES) {
-            setError("Guess limit reached.");
+            setMessage("Guess limit reached.");
             setGameOver(true);
             return false;
         }
-        
-        setError("");
+
+        setMessage("");
         setGuesses([...guesses, guess]);
         evaluateGuess(guess);
         return true;
     }
 
+    /* 
+    TODO: These are very rudamentary rule but they are sufficient for now 
+    There are some corner cases that can occur when there are repeated letters in a guess
+    Case 1: Guess contains multiples of a letter where only 1 is in the word and both "miss"
+        Actual: Both letters are yellow
+        Expected: One letter should be yellow (the first one) and the other should be gray
+    Case 2: Guess contains multiples of a letter where only 1 is in the word where 1 "hits" and 1 "misses"
+        Actual: "Miss" is yellow and "hit" is green
+        Expected: "Miss" is gray and "hit" is green
+    Need to devise a way to make sure each letter is only used once when evaluating a guess
+    */
     function evaluateGuess(guess) {
-        let evaluation = [];
-        for (let i = 0; i < guess.length; i++) {
-            /* 
-            TODO: These are very rudamentary rule but they are sufficient for now 
-            There are some corner cases that can occur when there are repeated letters in a guess
-            Case 1: Guess contains multiples of a letter where only 1 is in the word and both "miss"
-                Actual: Both letters are yellow
-                Expected: One letter should be yellow (the first one) and the other should be gray
-            Case 2: Guess contains multiples of a letter where only 1 is in the word where 1 "hits" and 1 "misses"
-                Actual: "Miss" is yellow and "hit" is green
-                Expected: "Miss" is gray and "hit" is green
-            Need to devise a way to make sure each letter is only used once when evaluating a guess
-            */
-            if (guess.charAt(i) === word.charAt(i)) {
-                evaluation = [...evaluation, EvaluationColor.Green];
-                continue;
+        const evaluation = guess.split("").map((letter, idx) => {
+            if (letter === word[idx]) {
+                return EvaluationColor.Green;
             }
 
-            if (word.includes(guess.charAt(i))) {
-                evaluation = [...evaluation, EvaluationColor.Yellow];
-                continue;
+            if (word.includes(letter)) {
+                return EvaluationColor.Yellow;
             }
 
-            evaluation = [...evaluation, EvaluationColor.Gray];
-        }
+            return EvaluationColor.Gray;
+        }, []);
 
         winGame(evaluation);
 
@@ -70,14 +67,12 @@ export default function WordDuel() {
     }
 
     function winGame(evaluation) {
-        for (let i = 0; i < evaluation.length; i++) {
-            if(evaluation[i] !== "green") {
-                return;
-            }
+        if (!evaluation.includes("green")) {
+            return;
         }
 
         setGameOver(true);
-        setError("You win!");
+        setMessage("You win!");
     }
 
     return (
@@ -91,7 +86,7 @@ export default function WordDuel() {
                 guesses={guesses}
                 evaluations={evaluations}
             />
-            {error && <div className='error-message' align="center">{error}</div>}
+            {message && <div className='message' align="center">{message}</div>}
             <Keyboard
                 wordLength={word.length}
                 checkGuess={checkGuess}
