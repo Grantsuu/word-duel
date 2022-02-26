@@ -1,17 +1,23 @@
 import React, { useState } from "react";
 import './keyboard.css';
 
-export default function Keyboard({ checkGuess }) {
+export default function Keyboard({ checkGuess, gameOver }) {
     const [ input, setInput ] = useState("");
     
     function handleSubmit(event) {
         event.preventDefault();
+        if (gameOver) {
+            return;
+        }
         if (checkGuess(input)) {
             setInput("");
         }
     }
     
     function onChange(event) {
+        if (gameOver) {
+            return;
+        }
         event.preventDefault();
         setInput(event.target.value.toLowerCase());
     }
@@ -23,10 +29,11 @@ export default function Keyboard({ checkGuess }) {
             </header>
             <form onSubmit={handleSubmit}>
                 <label>
-                    <input 
+                    <input
                         type="text"
                         value={input}
                         onChange={onChange}
+                        autoFocus
                     />
                 </label>
                 <input type="submit" value="Submit" />
