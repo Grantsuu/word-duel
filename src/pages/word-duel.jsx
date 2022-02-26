@@ -59,7 +59,7 @@ export default function WordDuel() {
             }
 
             return EvaluationColor.Gray;
-        }, []);
+        });
 
         winGame(evaluation);
 
