@@ -13,13 +13,14 @@ const EvaluationColor = {
 
 export default function WordDuel() {
     // const [ word, setWord ] = useState(generateNewWord())
-    const word = "stink";
+    const word = "butts";
     const [guesses, setGuesses] = useState([]);
     const [evaluations, setEvaluations] = useState([]);
     const [gameOver, setGameOver] = useState(false);
     const [message, setMessage] = useState("");
 
     function checkGuess(guess) {
+
         if (guess.length !== word.length) {
             setMessage("Guess wrong length!");
             return false;
@@ -37,42 +38,44 @@ export default function WordDuel() {
         return true;
     }
 
-    /* 
-    TODO: These are very rudamentary rule but they are sufficient for now 
-    There are some corner cases that can occur when there are repeated letters in a guess
-    Case 1: Guess contains multiples of a letter where only 1 is in the word and both "miss"
-        Actual: Both letters are yellow
-        Expected: One letter should be yellow (the first one) and the other should be gray
-    Case 2: Guess contains multiples of a letter where only 1 is in the word where 1 "hits" and 1 "misses"
-        Actual: "Miss" is yellow and "hit" is green
-        Expected: "Miss" is gray and "hit" is green
-    Need to devise a way to make sure each letter is only used once when evaluating a guess
-    */
     function evaluateGuess(guess) {
-        const evaluation = guess.split("").map((letter, idx) => {
-            if (letter === word[idx]) {
-                return EvaluationColor.Green;
-            }
+        const evaluation = new Array(word.length).fill(EvaluationColor.Gray);
+        let wordCopy = word;
 
-            if (word.includes(letter)) {
-                return EvaluationColor.Yellow;
+        for (let i = 0; i < word.length; i++) {
+            if (guess.charAt(i) === word.charAt(i)) {
+                evaluation[i] = EvaluationColor.Green;
+                // make sure to replace with an impossible symbol
+                wordCopy = replaceAt(wordCopy, i, '?');
             }
+        }
 
-            return EvaluationColor.Gray;
-        });
+        for (let i = 0; i < wordCopy.length; i++) {
+            const index = wordCopy.indexOf(guess.charAt(i));
+            if (index > 0) {
+                evaluation[i] = EvaluationColor.Yellow;
+                // make sure to replace with an impossible symbol
+                wordCopy = replaceAt(wordCopy, index, '?');
+            }
+        }
 
         winGame(evaluation);
-
         setEvaluations([...evaluations, evaluation]);
     }
 
     function winGame(evaluation) {
-        if (!evaluation.includes("green")) {
-            return;
+        for (let i = 0; i < evaluation.length; i++) {
+            if (!evaluation[i].includes("green")) {
+                return;
+            }
         }
 
         setGameOver(true);
         setMessage("You win!");
+    }
+
+    function replaceAt(word, index, replacement) {
+        return word.slice(0, index) + replacement + word.slice(index + replacement.length);
     }
 
     return (
