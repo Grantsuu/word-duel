@@ -19,13 +19,10 @@ export default function Keyboard({ word, updateActive, checkGuess, gameOver }) {
             return;
         }
         event.preventDefault();
-        if (event.target.value.match(/[^a-z]/g)) {
-            event.target.value = event.target.value.replace(/[^a-z]/g, '');
-        }
-        let val = event.target.value;
+        const val = event.target.value.replace(/[^a-zA-Z]/g, '').toLowerCase();
         if (val.length <= word.length) {
-            setInput(event.target.value.toLowerCase());
-            updateActive(event.target.value.toLowerCase());
+            setInput(val);
+            updateActive(val);
         }
     }
 
