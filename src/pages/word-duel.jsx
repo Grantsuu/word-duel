@@ -64,10 +64,8 @@ export default function WordDuel() {
     }
 
     function winGame(evaluation) {
-        for (let i = 0; i < evaluation.length; i++) {
-            if (!evaluation[i].includes("green")) {
-                return;
-            }
+        if (evaluation.some(result => result !== "green")) {
+            return;
         }
 
         setGameOver(true);
