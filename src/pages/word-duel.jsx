@@ -11,6 +11,13 @@ const EvaluationColor = {
     Green: "green"
 }
 
+// special keys
+// @ - enter
+// ! - backspace
+const KeyboardLayout = {
+    Qwerty: "qwertyuiop-asdfghjkl-@zxcvbnm!"
+}
+
 export default function WordDuel() {
     // const [ word, setWord ] = useState(generateNewWord())
     const word = "butts";
@@ -97,6 +104,7 @@ export default function WordDuel() {
             {message && <div className='message' align="center">{message}</div>}
             <Keyboard
                 word={word}
+                layout={KeyboardLayout.Qwerty}
                 updateActive={updateActive}
                 checkGuess={checkGuess}
                 gameOver={gameOver}
