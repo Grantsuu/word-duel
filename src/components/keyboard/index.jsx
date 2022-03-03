@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import './keyboard.css';
 
-export default function Keyboard({ checkGuess, gameOver }) {
+export default function Keyboard({ word, updateActive, checkGuess, gameOver }) {
     const [ input, setInput ] = useState("");
     
     function handleSubmit(event) {
@@ -19,7 +19,11 @@ export default function Keyboard({ checkGuess, gameOver }) {
             return;
         }
         event.preventDefault();
-        setInput(event.target.value.toLowerCase());
+        const val = event.target.value.replace(/[^a-zA-Z]/g, '').toLowerCase();
+        if (val.length <= word.length) {
+            setInput(val);
+            updateActive(val);
+        }
     }
 
     return (
