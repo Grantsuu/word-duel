@@ -12,6 +12,6 @@
 .keyboard-row {
     display: flex;
     flex-direction: row;
-    padding: 4px;
+    padding: 2px;
     gap: 6px;
 }
