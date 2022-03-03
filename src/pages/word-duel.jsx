@@ -14,10 +14,15 @@ const EvaluationColor = {
 export default function WordDuel() {
     // const [ word, setWord ] = useState(generateNewWord())
     const word = "butts".split('');
+    const [active, setActive] = useState("".padEnd(word.length));
     const [guesses, setGuesses] = useState([]);
     const [evaluations, setEvaluations] = useState([]);
     const [gameOver, setGameOver] = useState(false);
     const [message, setMessage] = useState("");
+
+    function updateActive(active) {
+        setActive(active.padEnd(word.length));
+    }
 
     function checkGuess(guess) {
 
@@ -36,6 +41,7 @@ export default function WordDuel() {
 
         setMessage("");
         setGuesses([...guesses, guess]);
+        updateActive("");
         evaluateGuess(guess);
         return true;
     }
@@ -82,12 +88,14 @@ export default function WordDuel() {
             <Board
                 columns={word.length}
                 rows={MAX_GUESSES}
+                active={active}
                 guesses={guesses}
                 evaluations={evaluations}
             />
             {message && <div className='message' align="center">{message}</div>}
             <Keyboard
-                wordLength={word.length}
+                word={word}
+                updateActive={updateActive}
                 checkGuess={checkGuess}
                 gameOver={gameOver}
             />

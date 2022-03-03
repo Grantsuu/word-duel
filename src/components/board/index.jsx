@@ -2,8 +2,8 @@ import React from 'react';
 import Square from '../square';
 import './board.css';
 
-export default function Board({ columns, rows, guesses, evaluations }) {
-    function Row({ guess, evaluation }) {
+export default function Board({ columns, rows, active, guesses, evaluations }) {
+    function GuessRow({ guess, evaluation }) {
         return (
             <div className="word-duel-board-row">
                 {guess && guess.map((letter, idx) => <Square
@@ -13,6 +13,23 @@ export default function Board({ columns, rows, guesses, evaluations }) {
                 />)}
             </div>
         );
+    }
+
+    function ActiveRow({ active }) {
+        const letters = active.toUpperCase().split("");
+
+        if (guesses.length < rows) {
+            return (
+                <div className="word-duel-board-row">
+                    {letters && letters.map((letter, idx) => <Square
+                        key={idx}
+                        value={letter}
+                    />)}
+                </div>
+            );
+        }
+
+        return null;
     }
 
     function EmptyRow() {
@@ -28,15 +45,18 @@ export default function Board({ columns, rows, guesses, evaluations }) {
     }
 
     // Until we fix the "end game" state
-    const emptyRows = Math.max(0, rows - guesses.length);
+    const emptyRows = Math.max(0, rows - guesses.length - 1);
 
     return (
         <div className="word-duel-board">
-            {guesses && guesses.map((guess, idx) => <Row
+            {guesses && guesses.map((guess, idx) => <GuessRow
                 key={idx}
                 guess={guess}
                 evaluation={evaluations[idx]}
             />)}
+            <ActiveRow
+                active={active}
+            />
             {Array(emptyRows).fill(0).map((_zero, idx) => <EmptyRow
                 key={idx}
             />)}
