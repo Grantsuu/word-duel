@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import './keyboard.css';
 import Key from '../key';
+import { SpecialKey } from "../../pages/word-duel";
 
 export default function Keyboard({ word, layout, updateActive, checkGuess, gameOver }) {
     const [input, setInput] = useState("");
 
-    function handleSubmit(event) {
-        event.preventDefault();
+    function handleSubmit() {
         if (gameOver) {
             return;
         }
@@ -27,14 +27,36 @@ export default function Keyboard({ word, layout, updateActive, checkGuess, gameO
         }
     }
 
+    function handleClick(event) {
+        console.log(event);
+        if (event === "BACK") {
+            const newInput = input.slice(0, -1);
+            setInput(newInput);
+            updateActive(newInput);
+            return;
+        }
+
+        if (event === "ENTER") {
+            handleSubmit();
+            return;
+        }
+
+        const newInput = input + event;
+        if (newInput.length <= word.length) {
+            setInput(newInput);
+            updateActive(newInput);
+        }
+    }
+
     function KeyboardRow({ rowLayout }) {
         return (
             <div className="keyboard-row">
                 {rowLayout && rowLayout.toUpperCase().split('').map((letter, idx) =>
                     <Key
                         key={idx}
-                        color="key-default"
+                        color="key"
                         value={letter}
+                        handleClick={handleClick}
                     />
                 )}
             </div>
@@ -56,9 +78,6 @@ export default function Keyboard({ word, layout, updateActive, checkGuess, gameO
 
     return (
         <div className="word-duel-keyboard">
-            <header>
-                Input Word
-            </header>
             <form onSubmit={handleSubmit}>
                 <label>
                     <input

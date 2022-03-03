@@ -6,11 +6,13 @@ import './word-duel.css';
 
 export const MAX_GUESSES = 6;
 
-// special keys
-// @ - enter
-// ! - backspace
 const KeyboardLayout = {
     Qwerty: "qwertyuiop-asdfghjkl-@zxcvbnm!"
+}
+
+export const SpecialKey = {
+    Enter: '@',
+    Back: '!'
 }
 
 export default function WordDuel() {
