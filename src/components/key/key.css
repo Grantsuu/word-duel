@@ -1,0 +1,40 @@
+.key-default {
+    background: #818686;
+    border: 0px;
+    height: 58px;
+    width: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+.key-big {
+    background: #818686;
+    height: 58px;
+    width: 72px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    font-weight: bold;
+    border-radius: 6px;
+}
+
+.key-gray {
+    background: #5c5e5e;
+    border: 2px solid rgb(255, 255, 255);
+}
+
+.key-green {
+    background: rgb(66, 136, 66);
+    border: 2px solid rgb(255, 255, 255);
+}
+
+.key-yellow {
+    background: rgb(192, 165, 47);
+    border: 2px solid rgb(255, 255, 255);
+}
