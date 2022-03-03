@@ -4,13 +4,11 @@ import './board.css';
 
 export default function Board({ columns, rows, guesses, evaluations }) {
     function Row({ guess, evaluation }) {
-        const letters = guess.toUpperCase().split("");
-
         return (
             <div className="word-duel-board-row">
-                {letters && letters.map((letter, idx) => <Square
+                {guess && guess.map((letter, idx) => <Square
                     key={idx}
-                    value={letter}
+                    value={letter.toUpperCase()}
                     color={evaluation[idx]}
                 />)}
             </div>
