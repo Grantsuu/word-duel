@@ -11,11 +11,13 @@ const EvaluationColor = {
     Green: "green"
 }
 
-// special keys
-// @ - enter
-// ! - backspace
 const KeyboardLayout = {
     Qwerty: "qwertyuiop-asdfghjkl-@zxcvbnm!"
+}
+
+export const SpecialKey = {
+    Enter: '@',
+    Back: '!'
 }
 
 export default function WordDuel() {
