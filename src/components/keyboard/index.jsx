@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import './keyboard.css';
+import Key from '../key';
 
 export default function Keyboard({ word, updateActive, checkGuess, gameOver }) {
-    const [ input, setInput ] = useState("");
-    
+    const [input, setInput] = useState("");
+
     function handleSubmit(event) {
         event.preventDefault();
         if (gameOver) {
@@ -13,7 +14,7 @@ export default function Keyboard({ word, updateActive, checkGuess, gameOver }) {
             setInput("");
         }
     }
-    
+
     function onChange(event) {
         if (gameOver) {
             return;
@@ -42,6 +43,48 @@ export default function Keyboard({ word, updateActive, checkGuess, gameOver }) {
                 </label>
                 <input type="submit" value="Submit" />
             </form>
+            <div className="keyboard-row">
+                <Key
+                    color="key-default"
+                    value="Q"
+                />
+                <Key
+                    color="key-default"
+                    value="W"
+                />
+                <Key
+                    color="key-default"
+                    value="E"
+                />
+                <Key
+                    color="key-default"
+                    value="R"
+                />
+                <Key
+                    color="key-default"
+                    value="T"
+                />
+                <Key
+                    color="key-default"
+                    value="Y"
+                />
+                <Key
+                    color="key-default"
+                    value="U"
+                />
+                <Key
+                    color="key-default"
+                    value="I"
+                />
+                <Key
+                    color="key-default"
+                    value="O"
+                />
+                <Key
+                    color="key-default"
+                    value="P"
+                />
+            </div>
         </div>
     );
 }
