@@ -48,22 +48,24 @@ export default function WordDuel() {
 
     function evaluateGuess(guess) {
         const evaluation = new Array(word.length).fill(EvaluationColor.Gray);
-        const replacementSymbol = '?';
         let wordCopy = word;
 
         for (let i = 0; i < word.length; i++) {
             if (guess[i] === word[i]) {
                 evaluation[i] = EvaluationColor.Green;
                 // make sure to replace with an impossible symbol
-                wordCopy[i] = replacementSymbol;
+                delete wordCopy[i];
             }
         }
-
+        
+        console.log({evaluation, guess, wordCopy});
+        
         for (let i = 0; i < wordCopy.length; i++) {
-            if (wordCopy.includes(guess[i]) > 0) {
+            const indexOfLetter = wordCopy.indexOf(guess[i]);
+            if (indexOfLetter > -1) {
                 evaluation[i] = EvaluationColor.Yellow;
                 // make sure to replace with an impossible symbol
-                wordCopy[i] = replacementSymbol;
+                delete wordCopy[indexOfLetter];
             }
         }
 
