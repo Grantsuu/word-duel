@@ -13,7 +13,7 @@ const EvaluationColor = {
 
 export default function WordDuel() {
     // const [ word, setWord ] = useState(generateNewWord())
-    const word = "butts";
+    const word = "butts".split('');
     const [active, setActive] = useState("".padEnd(word.length));
     const [guesses, setGuesses] = useState([]);
     const [evaluations, setEvaluations] = useState([]);
@@ -25,6 +25,8 @@ export default function WordDuel() {
     }
 
     function checkGuess(guess) {
+
+        guess = guess.split('');
 
         if (guess.length !== word.length) {
             setMessage("Guess wrong length!");
@@ -49,19 +51,21 @@ export default function WordDuel() {
         let wordCopy = word;
 
         for (let i = 0; i < word.length; i++) {
-            if (guess.charAt(i) === word.charAt(i)) {
+            if (guess[i] === word[i]) {
                 evaluation[i] = EvaluationColor.Green;
                 // make sure to replace with an impossible symbol
-                wordCopy = replaceAt(wordCopy, i, '?');
+                delete wordCopy[i];
             }
         }
-
+        
+        console.log({evaluation, guess, wordCopy});
+        
         for (let i = 0; i < wordCopy.length; i++) {
-            const index = wordCopy.indexOf(guess.charAt(i));
-            if (index > 0) {
+            const indexOfLetter = wordCopy.indexOf(guess[i]);
+            if (indexOfLetter > -1) {
                 evaluation[i] = EvaluationColor.Yellow;
                 // make sure to replace with an impossible symbol
-                wordCopy = replaceAt(wordCopy, index, '?');
+                delete wordCopy[indexOfLetter];
             }
         }
 
@@ -76,10 +80,6 @@ export default function WordDuel() {
 
         setGameOver(true);
         setMessage("You win!");
-    }
-
-    function replaceAt(word, index, replacement) {
-        return word.slice(0, index) + replacement + word.slice(index + replacement.length);
     }
 
     return (
