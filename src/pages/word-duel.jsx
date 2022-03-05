@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import Keyboard from '../components/keyboard';
 import Board from '../components/board';
-import * as util from '../utils/utils';
+import { getEvaluation, isMaxGuesses, isWin } from '../utils';
 import './word-duel.css';
+
+export const MAX_GUESSES = 6;
 
 export default function WordDuel() {
     // const [ word, setWord ] = useState(generateNewWord())
@@ -19,14 +21,14 @@ export default function WordDuel() {
 
     function checkGuess(guess) {
 
-        if (util.isMaxGuesses(guesses)) {
+        if (isMaxGuesses(guesses, MAX_GUESSES)) {
             setMessage("Maximum number of guesses already reached.");
             setGameOver(true);
             return false;
         }
 
-        if (!util.isWordLength(word, guess)) {
-            setMessage("Guess length does not match word length");
+        if (word.length !== guess.length) {
+            setMessage("Guess length does not match the word length");
             return false;
         }
 
@@ -35,7 +37,7 @@ export default function WordDuel() {
 
         setGuesses([...guesses, guess]);
 
-        const evaluation = util.getEvaluation(word, guess);
+        const evaluation = getEvaluation(word, guess);
         setEvaluations([...evaluations, evaluation]);
 
         return true;
@@ -49,16 +51,16 @@ export default function WordDuel() {
 
         const evaluation = evaluations[evaluations.length - 1];
 
-        if (!util.isWin(evaluation)) {
-            if (util.isMaxGuesses(guesses)) {
-                setGameOver(true);
-                setMessage("You lose!");
-            }
-            return;
+        if (util.isWin(evaluation)) {
+            endGame("You win!");
+        } else if (util.isMaxGuesses(guesses)) {
+            endGame("You lose!");
         }
+    }
 
+    function endGame(message) {
         setGameOver(true);
-        setMessage("You win!");
+        setMessage(message);
     }
 
     useEffect(
@@ -75,7 +77,7 @@ export default function WordDuel() {
             </header>
             <Board
                 columns={word.length}
-                rows={util.MAX_GUESSES}
+                rows={MAX_GUESSES}
                 active={active}
                 guesses={guesses}
                 evaluations={evaluations}

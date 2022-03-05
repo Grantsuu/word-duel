@@ -1,5 +1,3 @@
-export const MAX_GUESSES = 6;
-
 const EvaluationColor = {
     Gray: "gray",
     Yellow: "yellow",
@@ -30,25 +28,10 @@ export function getEvaluation([...word], [...guess]) {
     return evaluation;
 }
 
-export function isWordLength(word, guess) {
-    if (word.length === guess.length) {
-        return true;
-    }
-
-    return false;
-}
-
-export function isMaxGuesses(guesses) {
-    if (guesses.length >= MAX_GUESSES) {
-        return true;
-    }
-    return false;
+export function isMaxGuesses(guesses, max) {
+    return guesses.length >= max;
 }
 
 export function isWin(evaluation) {
-    if (evaluation.some(result => result !== "green")) {
-        return false;
-    }
-
-    return true;
+    return !evaluation.some(result => result !== EvaluationColor.Green);
 }
