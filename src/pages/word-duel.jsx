@@ -15,6 +15,15 @@ export const SpecialKey = {
     Back: '!'
 }
 
+const KeyboardLayout = {
+    Qwerty: "qwertyuiop-asdfghjkl-@zxcvbnm!"
+}
+
+export const SpecialKey = {
+    Enter: '@',
+    Back: '!'
+}
+
 export default function WordDuel() {
     const [word, setWord] = useState("butts".split(''));
     const [active, setActive] = useState("".padEnd(word.length));
