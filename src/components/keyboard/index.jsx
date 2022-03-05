@@ -5,7 +5,12 @@ import Key from '../key';
 export default function Keyboard({ word, layout, updateActive, checkGuess, gameOver }) {
     const [input, setInput] = useState("");
 
-    function handleSubmit() {
+    // need event in case of using the submit form button
+    function handleSubmit(event) {
+        if (event) {
+            event.preventDefault();
+        }
+        
         if (gameOver) {
             return;
         }
@@ -36,7 +41,7 @@ export default function Keyboard({ word, layout, updateActive, checkGuess, gameO
         }
 
         if (event === "ENTER") {
-            handleSubmit();
+            handleSubmit(null);
             return;
         }
 
