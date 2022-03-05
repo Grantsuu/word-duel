@@ -1,15 +1,10 @@
-import React, { useState } from "react";
-import './word-duel.css';
+import React, { useState, useEffect } from "react";
 import Keyboard from '../components/keyboard';
 import Board from '../components/board';
+import { getEvaluation, isMaxGuesses, isWin } from '../utils';
+import './word-duel.css';
 
-const MAX_GUESSES = 6;
-
-const EvaluationColor = {
-    Gray: "gray",
-    Yellow: "yellow",
-    Green: "green"
-}
+export const MAX_GUESSES = 6;
 
 export default function WordDuel() {
     // const [ word, setWord ] = useState(generateNewWord())
@@ -26,61 +21,54 @@ export default function WordDuel() {
 
     function checkGuess(guess) {
 
-        guess = guess.split('');
-
-        if (guess.length !== word.length) {
-            setMessage("Guess wrong length!");
-            return false;
-        }
-
-        if (guesses.length >= MAX_GUESSES) {
-            setMessage("Guess limit reached.");
+        if (isMaxGuesses(guesses, MAX_GUESSES)) {
+            setMessage("Maximum number of guesses already reached.");
             setGameOver(true);
             return false;
         }
 
+        if (word.length !== guess.length) {
+            setMessage("Guess length does not match the word length");
+            return false;
+        }
+
         setMessage("");
-        setGuesses([...guesses, guess]);
         updateActive("");
-        evaluateGuess(guess);
+
+        setGuesses([...guesses, guess]);
+
+        const evaluation = getEvaluation(word, guess);
+        setEvaluations([...evaluations, evaluation]);
+
         return true;
     }
 
-    function evaluateGuess(guess) {
-        const evaluation = new Array(word.length).fill(EvaluationColor.Gray);
-        let wordCopy = word;
+    function checkWin() {
 
-        for (let i = 0; i < word.length; i++) {
-            if (guess[i] === word[i]) {
-                evaluation[i] = EvaluationColor.Green;
-                // make sure to replace with an impossible symbol
-                delete wordCopy[i];
-            }
-        }
-        
-        console.log({evaluation, guess, wordCopy});
-        
-        for (let i = 0; i < wordCopy.length; i++) {
-            const indexOfLetter = wordCopy.indexOf(guess[i]);
-            if (indexOfLetter > -1) {
-                evaluation[i] = EvaluationColor.Yellow;
-                // make sure to replace with an impossible symbol
-                delete wordCopy[indexOfLetter];
-            }
-        }
-
-        winGame(evaluation);
-        setEvaluations([...evaluations, evaluation]);
-    }
-
-    function winGame(evaluation) {
-        if (evaluation.some(result => result !== "green")) {
+        if (evaluations.length < 1) {
             return;
         }
 
-        setGameOver(true);
-        setMessage("You win!");
+        const evaluation = evaluations[evaluations.length - 1];
+
+        if (util.isWin(evaluation)) {
+            endGame("You win!");
+        } else if (util.isMaxGuesses(guesses)) {
+            endGame("You lose!");
+        }
     }
+
+    function endGame(message) {
+        setGameOver(true);
+        setMessage(message);
+    }
+
+    useEffect(
+        () => {
+            checkWin();
+        },
+        [evaluations],
+    );
 
     return (
         <div className="word-duel">

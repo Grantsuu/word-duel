@@ -9,7 +9,7 @@ export default function Keyboard({ word, updateActive, checkGuess, gameOver }) {
         if (gameOver) {
             return;
         }
-        if (checkGuess(input)) {
+        if (checkGuess(input.split(""))) {
             setInput("");
         }
     }
