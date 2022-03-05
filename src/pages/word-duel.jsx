@@ -1,62 +1,8 @@
 import React, { useState, useEffect } from "react";
-import './word-duel.css';
 import Keyboard from '../components/keyboard';
 import Board from '../components/board';
-
-const MAX_GUESSES = 6;
-
-const EvaluationColor = {
-    Gray: "gray",
-    Yellow: "yellow",
-    Green: "green"
-}
-
-function getEvaluation([...word], [...guess]) {
-    const evaluation = new Array(word.length).fill(EvaluationColor.Gray);
-    const wordCopy = word;
-
-    // first pass finds exact matches
-    for (let i = 0; i < word.length; i++) {
-        if (guess[i] === word[i]) {
-            evaluation[i] = EvaluationColor.Green;
-            delete wordCopy[i];
-        }
-    }
-
-    // second pass finds partial matches
-    for (let i = 0; i < wordCopy.length; i++) {
-        const indexOfLetter = wordCopy.indexOf(guess[i]);
-        if (indexOfLetter > -1) {
-            evaluation[i] = EvaluationColor.Yellow;
-            delete wordCopy[indexOfLetter];
-        }
-    }
-
-    return evaluation;
-}
-
-function isWordLength(word, guess) {
-    if (word.length === guess.length) {
-        return true;
-    }
-
-    return false;
-}
-
-function isMaxGuesses(guesses) {
-    if (guesses.length >= MAX_GUESSES) {
-        return true;
-    }
-    return false;
-}
-
-function isWin(evaluation) {
-    if (evaluation.some(result => result !== "green")) {
-        return false;
-    }
-
-    return true;
-}
+import * as util from '../utils/utils';
+import './word-duel.css';
 
 export default function WordDuel() {
     // const [ word, setWord ] = useState(generateNewWord())
@@ -73,13 +19,13 @@ export default function WordDuel() {
 
     function checkGuess(guess) {
 
-        if (isMaxGuesses(guesses)) {
+        if (util.isMaxGuesses(guesses)) {
             setMessage("Maximum number of guesses already reached.");
             setGameOver(true);
             return false;
         }
 
-        if (!isWordLength(word, guess)) {
+        if (!util.isWordLength(word, guess)) {
             setMessage("Guess length does not match word length");
             return false;
         }
@@ -89,7 +35,7 @@ export default function WordDuel() {
 
         setGuesses([...guesses, guess]);
 
-        const evaluation = getEvaluation(word, guess);
+        const evaluation = util.getEvaluation(word, guess);
         setEvaluations([...evaluations, evaluation]);
 
         return true;
@@ -103,8 +49,8 @@ export default function WordDuel() {
 
         const evaluation = evaluations[evaluations.length - 1];
 
-        if (!isWin(evaluation)) {
-            if (isMaxGuesses(guesses)) {
+        if (!util.isWin(evaluation)) {
+            if (util.isMaxGuesses(guesses)) {
                 setGameOver(true);
                 setMessage("You lose!");
             }
@@ -129,7 +75,7 @@ export default function WordDuel() {
             </header>
             <Board
                 columns={word.length}
-                rows={MAX_GUESSES}
+                rows={util.MAX_GUESSES}
                 active={active}
                 guesses={guesses}
                 evaluations={evaluations}
