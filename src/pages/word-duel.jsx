@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import Keyboard from '../components/keyboard';
 import Board from '../components/board';
 import { getEvaluation, isMaxGuesses, isWin } from '../utils';
@@ -16,8 +16,7 @@ export const SpecialKey = {
 }
 
 export default function WordDuel() {
-    // const [ word, setWord ] = useState(generateNewWord())
-    const word = "butts".split('');
+    const [word, setWord] = useState("butts".split(''));
     const [active, setActive] = useState("".padEnd(word.length));
     const [guesses, setGuesses] = useState([]);
     const [evaluations, setEvaluations] = useState([]);
@@ -31,8 +30,7 @@ export default function WordDuel() {
     function checkGuess(guess) {
 
         if (isMaxGuesses(guesses, MAX_GUESSES)) {
-            setMessage("Maximum number of guesses already reached.");
-            setGameOver(true);
+            endGame("Maximum number of guesses already reached.");
             return false;
         }
 
