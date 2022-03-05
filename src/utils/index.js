@@ -1,4 +1,4 @@
-const EvaluationColor = {
+export const EvaluationColor = {
     Gray: "gray",
     Yellow: "yellow",
     Green: "green"
