@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import './keyboard.css';
 import Key from '../key';
-import { SpecialKey } from "../../pages/word-duel";
 
 export default function Keyboard({ word, layout, updateActive, checkGuess, gameOver }) {
     const [input, setInput] = useState("");
