@@ -51,9 +51,9 @@ export default function WordDuel() {
 
         const evaluation = evaluations[evaluations.length - 1];
 
-        if (util.isWin(evaluation)) {
+        if (isWin(evaluation)) {
             endGame("You win!");
-        } else if (util.isMaxGuesses(guesses)) {
+        } else if (isMaxGuesses(guesses)) {
             endGame("You lose!");
         }
     }
@@ -67,7 +67,8 @@ export default function WordDuel() {
         () => {
             checkWin();
         },
-        [evaluations],
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [evaluations]
     );
 
     return (
