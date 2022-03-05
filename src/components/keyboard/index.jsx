@@ -55,7 +55,7 @@ export default function Keyboard({ word, layout, updateActive, checkGuess, gameO
     function KeyboardRow({ rowLayout }) {
         return (
             <div className="keyboard-row">
-                {rowLayout && rowLayout.toUpperCase().split('').map((letter, idx) =>
+                {rowLayout && rowLayout.split('').map((letter, idx) =>
                     <Key
                         key={idx}
                         color="key"

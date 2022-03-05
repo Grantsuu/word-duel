@@ -7,7 +7,7 @@ import './word-duel.css';
 export const MAX_GUESSES = 6;
 
 const KeyboardLayout = {
-    Qwerty: "qwertyuiop-asdfghjkl-@zxcvbnm!"
+    Qwerty: "QWERTYUIOP-ASDFGHJKL-@ZXCVBNM!"
 }
 
 export const SpecialKey = {
