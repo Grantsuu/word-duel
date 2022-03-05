@@ -8,3 +8,10 @@
     font-size: 25px;
     color: white;
 }
+
+.keyboard-row {
+    display: flex;
+    flex-direction: row;
+    padding: 2px;
+    gap: 6px;
+}

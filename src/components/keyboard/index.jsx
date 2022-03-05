@@ -1,11 +1,16 @@
 import React, { useState } from "react";
 import './keyboard.css';
+import Key from '../key';
 
-export default function Keyboard({ word, updateActive, checkGuess, gameOver }) {
-    const [ input, setInput ] = useState("");
-    
+export default function Keyboard({ word, layout, updateActive, checkGuess, gameOver }) {
+    const [input, setInput] = useState("");
+
+    // need event in case of using the submit form button
     function handleSubmit(event) {
-        event.preventDefault();
+        if (event) {
+            event.preventDefault();
+        }
+        
         if (gameOver) {
             return;
         }
@@ -13,7 +18,7 @@ export default function Keyboard({ word, updateActive, checkGuess, gameOver }) {
             setInput("");
         }
     }
-    
+
     function onChange(event) {
         if (gameOver) {
             return;
@@ -26,11 +31,57 @@ export default function Keyboard({ word, updateActive, checkGuess, gameOver }) {
         }
     }
 
+    function handleClick(event) {
+        console.log(event);
+        if (event === "BACK") {
+            const newInput = input.slice(0, -1);
+            setInput(newInput);
+            updateActive(newInput);
+            return;
+        }
+
+        if (event === "ENTER") {
+            handleSubmit(null);
+            return;
+        }
+
+        const newInput = input + event;
+        if (newInput.length <= word.length) {
+            setInput(newInput);
+            updateActive(newInput);
+        }
+    }
+
+    function KeyboardRow({ rowLayout }) {
+        return (
+            <div className="keyboard-row">
+                {rowLayout && rowLayout.split('').map((letter, idx) =>
+                    <Key
+                        key={idx}
+                        color="key"
+                        value={letter}
+                        handleClick={handleClick}
+                    />
+                )}
+            </div>
+        );
+    }
+
+    function Keyboard({ layout }) {
+        return (
+            <div className="word-duel-keyboard">
+                {layout && layout.split('-').map((row, idx) =>
+                    <KeyboardRow
+                        key={idx}
+                        rowLayout={row}
+                    />
+                )}
+            </div>
+        );
+    }
+
     return (
         <div className="word-duel-keyboard">
-            <header>
-                Input Word
-            </header>
             <form onSubmit={handleSubmit}>
                 <label>
                     <input
@@ -42,6 +93,9 @@ export default function Keyboard({ word, updateActive, checkGuess, gameOver }) {
                 </label>
                 <input type="submit" value="Submit" />
             </form>
+            <Keyboard
+                layout={layout}
+            />
         </div>
     );
 }
