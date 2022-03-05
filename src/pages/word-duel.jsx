@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import './word-duel.css';
 import Keyboard from '../components/keyboard';
 import Board from '../components/board';
@@ -9,6 +9,53 @@ const EvaluationColor = {
     Gray: "gray",
     Yellow: "yellow",
     Green: "green"
+}
+
+function getEvaluation([...word], [...guess]) {
+    const evaluation = new Array(word.length).fill(EvaluationColor.Gray);
+    const wordCopy = word;
+
+    // first pass finds exact matches
+    for (let i = 0; i < word.length; i++) {
+        if (guess[i] === word[i]) {
+            evaluation[i] = EvaluationColor.Green;
+            delete wordCopy[i];
+        }
+    }
+
+    // second pass finds partial matches
+    for (let i = 0; i < wordCopy.length; i++) {
+        const indexOfLetter = wordCopy.indexOf(guess[i]);
+        if (indexOfLetter > -1) {
+            evaluation[i] = EvaluationColor.Yellow;
+            delete wordCopy[indexOfLetter];
+        }
+    }
+
+    return evaluation;
+}
+
+function isWordLength(word, guess) {
+    if (word.length === guess.length) {
+        return true;
+    }
+
+    return false;
+}
+
+function isMaxGuesses(guesses) {
+    if (guesses.length >= MAX_GUESSES) {
+        return true;
+    }
+    return false;
+}
+
+function isWin(evaluation) {
+    if (evaluation.some(result => result !== "green")) {
+        return false;
+    }
+
+    return true;
 }
 
 export default function WordDuel() {
@@ -26,61 +73,54 @@ export default function WordDuel() {
 
     function checkGuess(guess) {
 
-        guess = guess.split('');
-
-        if (guess.length !== word.length) {
-            setMessage("Guess wrong length!");
-            return false;
-        }
-
-        if (guesses.length >= MAX_GUESSES) {
-            setMessage("Guess limit reached.");
+        if (isMaxGuesses(guesses)) {
+            setMessage("Maximum number of guesses already reached.");
             setGameOver(true);
             return false;
         }
 
+        if (!isWordLength(word, guess)) {
+            setMessage("Guess length does not match word length");
+            return false;
+        }
+
         setMessage("");
-        setGuesses([...guesses, guess]);
         updateActive("");
-        evaluateGuess(guess);
+
+        setGuesses([...guesses, guess]);
+
+        const evaluation = getEvaluation(word, guess);
+        setEvaluations([...evaluations, evaluation]);
+
         return true;
     }
 
-    function evaluateGuess(guess) {
-        const evaluation = new Array(word.length).fill(EvaluationColor.Gray);
-        let wordCopy = word;
+    function checkWin() {
 
-        for (let i = 0; i < word.length; i++) {
-            if (guess[i] === word[i]) {
-                evaluation[i] = EvaluationColor.Green;
-                // make sure to replace with an impossible symbol
-                delete wordCopy[i];
-            }
-        }
-        
-        console.log({evaluation, guess, wordCopy});
-        
-        for (let i = 0; i < wordCopy.length; i++) {
-            const indexOfLetter = wordCopy.indexOf(guess[i]);
-            if (indexOfLetter > -1) {
-                evaluation[i] = EvaluationColor.Yellow;
-                // make sure to replace with an impossible symbol
-                delete wordCopy[indexOfLetter];
-            }
+        if (evaluations.length < 1) {
+            return;
         }
 
-        winGame(evaluation);
-        setEvaluations([...evaluations, evaluation]);
-    }
+        const evaluation = evaluations[evaluations.length - 1];
 
-    function winGame(evaluation) {
-        if (evaluation.some(result => result !== "green")) {
+        if (!isWin(evaluation)) {
+            if (isMaxGuesses(guesses)) {
+                setGameOver(true);
+                setMessage("You lose!");
+            }
             return;
         }
 
         setGameOver(true);
         setMessage("You win!");
     }
+
+    useEffect(
+        () => {
+            checkWin();
+        },
+        [evaluations],
+    );
 
     return (
         <div className="word-duel">
