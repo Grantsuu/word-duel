@@ -12,6 +12,7 @@ export function getEvaluation([...word], [...guess]) {
     for (let i = 0; i < word.length; i++) {
         if (guess[i] === word[i]) {
             evaluation[i] = EvaluationColor.Green;
+            delete guess[i];
             delete wordCopy[i];
         }
     }
