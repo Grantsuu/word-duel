@@ -34,8 +34,15 @@ test('one partial', () => {
 
 test('one match, one partial', () => {
     const word = "abbde";
-    const guess = "abaaa";
-    const expected = [EvaluationColor.Green, EvaluationColor.Yellow, EvaluationColor.Gray, EvaluationColor.Gray, EvaluationColor.Gray];
+    const guess = "aaaba";
+    const expected = [EvaluationColor.Green, EvaluationColor.Gray, EvaluationColor.Gray, EvaluationColor.Yellow, EvaluationColor.Gray];
+    expect(getEvaluation(word, guess)).toEqual(expected);
+})
+
+test('one match, no yellow overwrite', () => {
+    const word = "abbbb";
+    const guess = "aaccc";
+    const expected = [EvaluationColor.Green, EvaluationColor.Gray, EvaluationColor.Gray, EvaluationColor.Gray, EvaluationColor.Gray];
     expect(getEvaluation(word, guess)).toEqual(expected);
 })
 
