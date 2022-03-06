@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Keyboard from '../components/keyboard';
 import Board from '../components/board';
 import { getEvaluation, isMaxGuesses, isWin } from '../utils';
-import { selectWords } from '../utils/word';
+import { selectWords, findWord } from '../utils/word';
 import './word-duel.css';
 
 export const MAX_GUESSES = 6;
@@ -36,6 +36,11 @@ export default function WordDuel() {
 
         if (word.length !== guess.length) {
             setMessage("Guess length does not match the word length");
+            return false;
+        }
+
+        if (!findWord(guess.join(''))) {
+            setMessage("Word not in dictionary.");
             return false;
         }
 
