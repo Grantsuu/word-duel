@@ -1,5 +1,5 @@
 export function selectWords(num, length) {
-    const data = require('../../data/words/' + length + '_letters.json');
+    const data = require('../../data/words/' + length + '_letters_normal.json');
     const ret = [];
     const obj_keys = Object.keys(data);
     const used_keys = [];
@@ -14,4 +14,10 @@ export function selectWords(num, length) {
 
     console.log(ret);
     return ret;
+}
+
+export function findWord(word) {
+    const data = require('../../data/words/' + word.length + '_letters_normal.json');
+
+    return data.includes(word);
 }
