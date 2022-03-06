@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Keyboard from '../components/keyboard';
 import Board from '../components/board';
 import { getEvaluation, isMaxGuesses, isWin } from '../utils';
+import { selectWords } from '../utils/word';
 import './word-duel.css';
 
 export const MAX_GUESSES = 6;
@@ -16,7 +17,7 @@ export const SpecialKey = {
 }
 
 export default function WordDuel() {
-    const [word, setWord] = useState("butts".split(''));
+    const [word, setWord] = useState(selectWords(3, 5)[0].split(''));
     const [active, setActive] = useState("".padEnd(word.length));
     const [guesses, setGuesses] = useState([]);
     const [evaluations, setEvaluations] = useState([]);
