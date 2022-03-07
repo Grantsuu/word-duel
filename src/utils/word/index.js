@@ -19,5 +19,5 @@ export function selectWords(num, length) {
 export function findWord(word) {
     const data = require('../../data/words/' + word.length + '_letters_normal.json');
 
-    return data.includes(word);
+    return data.includes(word.toLowerCase());
 }

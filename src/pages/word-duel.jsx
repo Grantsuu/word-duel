@@ -44,6 +44,12 @@ export default function WordDuel() {
             return false;
         }
 
+        setGuess(guess);
+
+        return true;
+    }
+
+    function setGuess(guess) {
         setMessage("");
         updateActive("");
 
