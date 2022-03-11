@@ -20,13 +20,14 @@ export default function Keyboard({ word, layout, updateActive, checkGuess, gameO
 
     function handleSpecialKey(key) {
         // on screen value uses back while keyboard uses backspace
-        if(key.toLowerCase() === "back" || key.toLowerCase() === "backspace"){
-            handleBackspace();
-            return true;
-        }
-        if(key.toLowerCase() === "enter"){
-            handleEnter();
-            return true;
+        switch (key.toLowerCase()) {
+            case "back":
+            case "backspace":
+                handleBackspace();
+                return true;
+            case "enter":
+                handleEnter();
+                return true;
         }
         return false;
     }
@@ -51,7 +52,7 @@ export default function Keyboard({ word, layout, updateActive, checkGuess, gameO
     const handleKeydown = useCallback(event => {
         event.preventDefault();
         handleInput(event.key);
-    }, [input]);
+    }, [handleInput]);
 
     useEffect(() => {
         window.addEventListener('keydown', handleKeydown);
