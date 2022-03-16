@@ -17,7 +17,12 @@ export const SpecialKey = {
 }
 
 export default function WordDuel() {
-    const [word, setWord] = useState(selectWords(3, 5)[0].split(''));
+    const [word, setWord] = useState([]);
+    useEffect(() => {
+        setWord(selectWords(3, 5)[0].split(''));
+    }, []);
+    console.log(word);
+
     const [active, setActive] = useState("".padEnd(word.length));
     const [guesses, setGuesses] = useState([]);
     const [evaluations, setEvaluations] = useState([]);
