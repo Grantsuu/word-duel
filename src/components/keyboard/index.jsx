@@ -1,56 +1,65 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import './keyboard.css';
 import Key from '../key';
 
 export default function Keyboard({ word, layout, updateActive, checkGuess, gameOver }) {
+    // TODO: I'm pretty sure input and active can be combined into one field but i dont know how
     const [input, setInput] = useState("");
 
-    // need event in case of using the submit form button
-    function handleSubmit(event) {
-        if (event) {
-            event.preventDefault();
-        }
-        
-        if (gameOver) {
-            return;
-        }
+    function handleBackspace() {
+        const newInput = input.slice(0, -1);
+        setInput(newInput);
+        updateActive(newInput);
+    }
+
+    function handleEnter() {
         if (checkGuess(input.split(""))) {
             setInput("");
         }
     }
 
-    function onChange(event) {
+    function handleSpecialKey(key) {
+        // on screen value uses back while keyboard uses backspace
+        switch (key.toLowerCase()) {
+            case "back":
+            case "backspace":
+                handleBackspace();
+                return true;
+            case "enter":
+                handleEnter();
+                return true;
+        }
+        return false;
+    }
+
+    function handleInput(key) {
         if (gameOver) {
             return;
         }
-        event.preventDefault();
-        const val = event.target.value.replace(/[^a-zA-Z]/g, '').toLowerCase();
-        if (val.length <= word.length) {
-            setInput(val);
-            updateActive(val);
-        }
-    }
+        key = key.replace(/[^a-zA-Z]/g, '').toLowerCase();
 
-    function handleClick(event) {
-        console.log(event);
-        if (event === "BACK") {
-            const newInput = input.slice(0, -1);
-            setInput(newInput);
-            updateActive(newInput);
+        if (handleSpecialKey(key)) {
             return;
         }
 
-        if (event === "ENTER") {
-            handleSubmit(null);
-            return;
-        }
-
-        const newInput = input + event;
+        const newInput = input + key;
         if (newInput.length <= word.length) {
             setInput(newInput);
             updateActive(newInput);
         }
     }
+
+    const handleKeydown = useCallback(event => {
+        event.preventDefault();
+        handleInput(event.key);
+    }, [handleInput]);
+
+    useEffect(() => {
+        window.addEventListener('keydown', handleKeydown);
+        return () => {
+            window.removeEventListener('keydown', handleKeydown);
+        };
+    }, [handleKeydown]);
 
     function KeyboardRow({ rowLayout }) {
         return (
@@ -60,7 +69,7 @@ export default function Keyboard({ word, layout, updateActive, checkGuess, gameO
                         key={idx}
                         color="key"
                         value={letter}
-                        handleClick={handleClick}
+                        handleInput={handleInput}
                     />
                 )}
             </div>
@@ -82,17 +91,6 @@ export default function Keyboard({ word, layout, updateActive, checkGuess, gameO
 
     return (
         <div className="word-duel-keyboard">
-            <form onSubmit={handleSubmit}>
-                <label>
-                    <input
-                        type="text"
-                        value={input}
-                        onChange={onChange}
-                        autoFocus
-                    />
-                </label>
-                <input type="submit" value="Submit" />
-            </form>
             <Keyboard
                 layout={layout}
             />

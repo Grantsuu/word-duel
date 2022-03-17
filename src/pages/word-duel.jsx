@@ -28,7 +28,6 @@ export default function WordDuel() {
     }
 
     function checkGuess(guess) {
-
         if (isMaxGuesses(guesses, MAX_GUESSES)) {
             endGame("Maximum number of guesses already reached.");
             return false;
@@ -42,10 +41,12 @@ export default function WordDuel() {
         setMessage("");
         updateActive("");
 
-        setGuesses([...guesses, guess]);
-
         const evaluation = getEvaluation(word, guess);
+
+        // TODO: there has to be a more sane way of fixing this but if setGuesses goes before setEvaluations
+        // GuessRow receives an empty evaluations array and crashes
         setEvaluations([...evaluations, evaluation]);
+        setGuesses([...guesses, guess]);
 
         return true;
     }
