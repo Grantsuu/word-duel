@@ -17,9 +17,11 @@ export const SpecialKey = {
 }
 
 export default function WordDuel() {
-    const [word, setWord] = useState([]);
+    const word_length = 5;
+
+    const [word, setWord] = useState("".padEnd(word_length));
     useEffect(() => {
-        setWord(selectWords(3, 5)[0].split(''));
+        setWord(selectWords(3, word_length)[0].split(''));
     }, []);
     console.log(word);
 
