@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Keyboard from '../components/keyboard';
 import Board from '../components/board';
 import { getEvaluation, isMaxGuesses, isWin } from '../utils';
+import { selectWords, findWord } from '../utils/word';
 import './word-duel.css';
 
 export const MAX_GUESSES = 6;
@@ -16,13 +17,20 @@ export const SpecialKey = {
 }
 
 export default function WordDuel() {
-    const [word, setWord] = useState("butts".split(''));
+    const word_length = 5;
+
+    const [word, setWord] = useState("".padEnd(word_length));
     const [active, setActive] = useState("".padEnd(word.length));
     const [guesses, setGuesses] = useState([]);
     const [evaluations, setEvaluations] = useState([]);
     const [gameOver, setGameOver] = useState(false);
     const [message, setMessage] = useState("");
 
+    useEffect(() => {
+        setWord(selectWords(3, word_length)[0]);
+    }, []);
+    console.log(word);
+    
     function updateActive(active) {
         setActive(active.padEnd(word.length));
     }
@@ -38,6 +46,17 @@ export default function WordDuel() {
             return false;
         }
 
+        if (!findWord(guess.join(''))) {
+            setMessage("Word not in dictionary.");
+            return false;
+        }
+
+        setGuess(guess);
+
+        return true;
+    }
+
+    function setGuess(guess) {
         setMessage("");
         updateActive("");
 

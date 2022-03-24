@@ -36,11 +36,14 @@ export default function Keyboard({ word, layout, updateActive, checkGuess, gameO
         if (gameOver) {
             return;
         }
-        key = key.replace(/[^a-zA-Z]/g, '').toLowerCase();
-
         if (handleSpecialKey(key)) {
             return;
         }
+        // don't want to input special keys that have a value longer than 1
+        if(key.length > 1) {
+            return;
+        }
+        key = key.replace(/[^a-zA-Z]/g, '').toLowerCase();
 
         const newInput = input + key;
         if (newInput.length <= word.length) {
