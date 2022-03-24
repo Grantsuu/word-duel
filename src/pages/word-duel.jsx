@@ -20,17 +20,17 @@ export default function WordDuel() {
     const word_length = 5;
 
     const [word, setWord] = useState("".padEnd(word_length));
-    useEffect(() => {
-        setWord(selectWords(3, word_length)[0].split(''));
-    }, []);
-    console.log(word);
-
     const [active, setActive] = useState("".padEnd(word.length));
     const [guesses, setGuesses] = useState([]);
     const [evaluations, setEvaluations] = useState([]);
     const [gameOver, setGameOver] = useState(false);
     const [message, setMessage] = useState("");
 
+    useEffect(() => {
+        setWord(selectWords(3, word_length)[0]);
+    }, []);
+    console.log(word);
+    
     function updateActive(active) {
         setActive(active.padEnd(word.length));
     }

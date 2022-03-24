@@ -1,19 +1,16 @@
 export function selectWords(num, length) {
     const data = require('../../data/words/' + length + '_letters_normal.json');
-    const ret = [];
+    const words = [];
     const obj_keys = Object.keys(data);
-    const used_keys = [];
 
-    while(ret.length < num) {
-        var ran_key = obj_keys[Math.floor(Math.random() *obj_keys.length)];
-        if (!used_keys.includes(ran_key)){
-            used_keys.push(ran_key);
-            ret.push(data[ran_key]);
+    while(words.length < num) {
+        var random_word = obj_keys[Math.floor(Math.random() *obj_keys.length)];
+        if (!words.includes(random_word)){
+            words.push(data[random_word].split(''));
         }
     }
 
-    console.log(ret);
-    return ret;
+    return words;
 }
 
 export function findWord(word) {
